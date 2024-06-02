@@ -1,5 +1,8 @@
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { db } from "@/db/database";
 import { bids as bidsSchema } from "@/db/schema";
+import { revalidatePath } from "next/cache";
 
 export default async function Home() {
   const bids = await db.query.bids.findMany();
@@ -11,10 +14,11 @@ export default async function Home() {
           "use server";
           // const bid = formData.get("bid") as string;
           await db.insert(bidsSchema).values({});
+          revalidatePath("/");
         }}
       >
-        <input type="text" name="bid" id="bid" placeholder="Bid" />
-        <button type="submit">Place Bid</button>
+        <Input type="text" name="bid" id="bid" placeholder="Bid" />
+        <Button type="submit">Place Bid</Button>
       </form>
 
       {bids.map((bid) => (
