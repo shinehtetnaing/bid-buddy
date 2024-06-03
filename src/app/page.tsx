@@ -13,12 +13,11 @@ export default async function Home() {
   const allItems = await db.query.items.findMany();
 
   return (
-    <main className="container mx-auto py-12">
-      {session ? <SignOut /> : <SignIn />}
-
-      {session?.user?.name}
+    <main className="container mx-auto py-12 space-y-8">
+      <h1 className="text-4xl font-bold">Post an Item to sell</h1>
 
       <form
+        className="flex flex-col border p-8 rounded-xl space-y-4 max-w-lg"
         action={async (formData: FormData) => {
           "use server";
           await db.insert(items).values({
@@ -28,13 +27,27 @@ export default async function Home() {
           revalidatePath("/");
         }}
       >
-        <Input type="text" name="name" id="name" placeholder="Name your item" />
-        <Button type="submit">Post Item</Button>
+        <Input
+          className="max-w-lg"
+          type="text"
+          name="name"
+          id="name"
+          placeholder="Name your item"
+        />
+        <Button className="self-end" type="submit">
+          Post Item
+        </Button>
       </form>
 
-      {allItems.map((item) => (
-        <div key={item.id}>{item.name}</div>
-      ))}
+      <h2 className="text-2xl font-bold">Items for Sale</h2>
+
+      <div className="grid grid-cols-4 gap-8">
+        {allItems.map((item) => (
+          <div key={item.id} className="border p-8 rounded-xl">
+            {item.name}
+          </div>
+        ))}
+      </div>
     </main>
   );
 }
