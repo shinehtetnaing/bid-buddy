@@ -10,10 +10,21 @@ export async function Header() {
   return (
     <div className="bg-gray-200 py-2">
       <div className="container flex justify-between items-center">
-        <Link href="/" className="hover:underline flex items-center gap-1">
-          <Image src="/logo.png" width="50" height="50" alt="Logo" />
-          BidBuddy.com
-        </Link>
+        <div className="flex items-center gap-8">
+          <Link href="/" className="hover:underline flex items-center gap-1">
+            <Image src="/logo.png" width="50" height="50" alt="Logo" />
+            BidBuddy.com
+          </Link>
+
+          <div>
+            <Link
+              href="/items/create"
+              className="hover:underline flex items-center gap-1"
+            >
+              Auction an Item
+            </Link>
+          </div>
+        </div>
 
         <div className="flex items-center gap-4">
           <div>{session?.user?.name}</div>
