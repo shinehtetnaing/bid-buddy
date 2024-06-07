@@ -83,3 +83,5 @@ export const items = mysqlTable("bb_item", {
   fileKey: text("fileKey").notNull(),
   startingPrice: int("startingPrice").notNull().default(0),
 });
+
+export type Item = typeof items.$inferSelect;
