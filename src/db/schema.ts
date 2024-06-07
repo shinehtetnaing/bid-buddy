@@ -80,5 +80,6 @@ export const items = mysqlTable("bb_item", {
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
+  fileKey: text("fileKey").notNull(),
   startingPrice: int("startingPrice").notNull().default(0),
 });
