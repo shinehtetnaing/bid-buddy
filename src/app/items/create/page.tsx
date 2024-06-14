@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { createItem, createUploadUrl } from "./actions";
 
-export default async function CreatePage() {
+export default function CreatePage() {
   return (
-    <main className="container mx-auto py-12 space-y-8">
+    <main className="space-y-8">
       <h1 className="text-4xl font-bold">Post an Item</h1>
 
       <form

@@ -82,6 +82,7 @@ export const items = mysqlTable("bb_item", {
   name: text("name").notNull(),
   fileKey: text("fileKey").notNull(),
   startingPrice: int("startingPrice").notNull().default(0),
+  bidInterval: int("bidInterval").notNull().default(100),
 });
 
 export type Item = typeof items.$inferSelect;

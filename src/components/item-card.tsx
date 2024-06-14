@@ -1,6 +1,9 @@
 import { Item } from "@/db/schema";
 import { getImageUrl } from "@/lib/files";
 import Image from "next/image";
+import { Button } from "./ui/button";
+import Link from "next/link";
+import { convertToDollar } from "@/lib/currency";
 
 export function ItemCard({ item }: { item: Item }) {
   return (
@@ -12,7 +15,13 @@ export function ItemCard({ item }: { item: Item }) {
         height={200}
       />
       <h2 className="text-xl font-bold">{item.name}</h2>
-      <p className="text-lg">starting price ${item.startingPrice / 100}</p>
+      <p className="text-lg">
+        starting price ${convertToDollar(item.startingPrice)}
+      </p>
+
+      <Button asChild>
+        <Link href={`/items/${item.id}`}>Place Bid</Link>
+      </Button>
     </div>
   );
 }
