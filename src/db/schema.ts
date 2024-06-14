@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   int,
   mysqlTable,
@@ -70,10 +71,6 @@ export const verificationTokens = mysqlTable(
   })
 );
 
-export const bids = mysqlTable("bb_bids", {
-  id: serial("id").primaryKey(),
-});
-
 export const items = mysqlTable("bb_item", {
   id: serial("id").primaryKey(),
   userId: varchar("userId", { length: 255 })
@@ -81,8 +78,28 @@ export const items = mysqlTable("bb_item", {
     .references(() => users.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   fileKey: text("fileKey").notNull(),
+  currentBid: int("currentBid").notNull().default(0),
   startingPrice: int("startingPrice").notNull().default(0),
   bidInterval: int("bidInterval").notNull().default(100),
 });
+
+export const bids = mysqlTable("bb_bids", {
+  id: serial("id").primaryKey(),
+  amount: int("amount").notNull(),
+  itemId: int("itemId")
+    .notNull()
+    .references(() => items.id, { onDelete: "cascade" }),
+  userId: varchar("userId", { length: 255 })
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
+});
+
+export const usersRelations = relations(bids, ({ one }) => ({
+  user: one(users, {
+    fields: [bids.userId],
+    references: [users.id],
+  }),
+}));
 
 export type Item = typeof items.$inferSelect;
