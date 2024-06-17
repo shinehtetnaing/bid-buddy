@@ -87,6 +87,7 @@ export async function createBid(itemId: number) {
       data: {
         itemId,
         bidAmount: latestBidValue,
+        itemName: item.name,
       },
     });
   }

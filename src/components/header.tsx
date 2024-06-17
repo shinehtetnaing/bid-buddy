@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  NotificationCell,
   NotificationFeedPopover,
   NotificationIconButton,
 } from "@knocklabs/react";
@@ -9,6 +10,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { Button } from "./ui/button";
+import { convertToDollar } from "@/lib/currency";
 
 export function Header() {
   const [isVisible, setIsVisible] = useState(false);
@@ -61,6 +63,25 @@ export function Header() {
                 buttonRef={notifButtonRef}
                 isVisible={isVisible}
                 onClose={() => setIsVisible(false)}
+                renderItem={({ item, ...props }) => (
+                  <NotificationCell {...props} item={item}>
+                    <div className="rounded-xl">
+                      <Link
+                        className="text-blue-400 hover:text=blue-500"
+                        onClick={() => {
+                          setIsVisible(false);
+                        }}
+                        href={`/items/${item?.data?.itemId}`}
+                      >
+                        Someone outbidded you on{" "}
+                        <span className="font-bold">
+                          {item?.data?.itemName}
+                        </span>{" "}
+                        by ${convertToDollar(item?.data?.bidAmount)}
+                      </Link>
+                    </div>
+                  </NotificationCell>
+                )}
               />
             </div>
           )}
