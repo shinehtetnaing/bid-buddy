@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Header } from "@/components/header";
 import { Providers } from "./providers";
+import { SessionProvider } from "next-auth/react";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -28,10 +29,12 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <Header />
-        <Providers>
-          <div className="container mx-auto py-12">{children}</div>
-        </Providers>
+        <SessionProvider>
+          <Providers>
+            <Header />
+            <div className="container mx-auto py-12">{children}</div>
+          </Providers>
+        </SessionProvider>
       </body>
     </html>
   );
