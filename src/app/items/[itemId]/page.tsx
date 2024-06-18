@@ -1,6 +1,9 @@
+import { auth } from "@/auth";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { db } from "@/db/database";
 import { bids, items } from "@/db/schema";
+import { isBidOver } from "@/lib/bids";
 import { convertToDollar } from "@/lib/currency";
 import { getImageUrl } from "@/lib/files";
 import { formatDistance } from "date-fns";
@@ -8,7 +11,6 @@ import { desc, eq } from "drizzle-orm";
 import Image from "next/image";
 import Link from "next/link";
 import { createBid } from "./actions";
-import { auth } from "@/auth";
 
 function formatTimestamp(timestamp: Date) {
   return formatDistance(timestamp, new Date(), { addSuffix: true });
@@ -56,7 +58,8 @@ export default async function ItemPage({
 
   const hasBids = allBids.length > 0;
 
-  const canPlaceBid = session && item.userId !== session.user.id;
+  const canPlaceBid =
+    session && item.userId !== session.user.id && !isBidOver(item);
 
   return (
     <main className="flex container mx-auto gap-8">
@@ -64,6 +67,11 @@ export default async function ItemPage({
         <h1 className="text-4xl font-bold">
           <span className="font-normal">Auction for</span> {item.name}
         </h1>
+        {isBidOver(item) && (
+          <Badge className="w-fit" variant="destructive">
+            Bidding Over
+          </Badge>
+        )}
         <Image
           src={getImageUrl(item.fileKey)}
           alt={item.name}

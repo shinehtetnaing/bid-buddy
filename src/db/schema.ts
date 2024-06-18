@@ -81,6 +81,7 @@ export const items = mysqlTable("bb_item", {
   currentBid: int("currentBid").notNull().default(0),
   startingPrice: int("startingPrice").notNull().default(0),
   bidInterval: int("bidInterval").notNull().default(100),
+  endDate: timestamp("endDate", { mode: "date" }).notNull(),
 });
 
 export const bids = mysqlTable("bb_bids", {

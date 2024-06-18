@@ -1,9 +1,11 @@
 import { Item } from "@/db/schema";
-import { getImageUrl } from "@/lib/files";
-import Image from "next/image";
-import { Button } from "./ui/button";
-import Link from "next/link";
+import { isBidOver } from "@/lib/bids";
 import { convertToDollar } from "@/lib/currency";
+import { getImageUrl } from "@/lib/files";
+import { format } from "date-fns";
+import Image from "next/image";
+import Link from "next/link";
+import { Button } from "./ui/button";
 
 export function ItemCard({ item }: { item: Item }) {
   return (
@@ -16,11 +18,21 @@ export function ItemCard({ item }: { item: Item }) {
       />
       <h2 className="text-xl font-bold">{item.name}</h2>
       <p className="text-lg">
-        starting price ${convertToDollar(item.startingPrice)}
+        Starting price: ${convertToDollar(item.startingPrice)}
       </p>
 
-      <Button asChild>
-        <Link href={`/items/${item.id}`}>Place Bid</Link>
+      {isBidOver(item) ? (
+        <p className="text-lg">Bidding is Over</p>
+      ) : (
+        <p className="text-lg">
+          End on: {format(item.endDate, "eeee M/dd/yy")}
+        </p>
+      )}
+
+      <Button asChild variant={isBidOver(item) ? "outline" : "default"}>
+        <Link href={`/items/${item.id}`}>
+          {isBidOver(item) ? "View Bid" : "Place Bid"}
+        </Link>
       </Button>
     </div>
   );

@@ -3,8 +3,12 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { createItem, createUploadUrl } from "./actions";
+import { DatePickerDemo } from "@/components/date-picker";
+import { useState } from "react";
 
 export default function CreatePage() {
+  const [date, setDate] = useState<Date | undefined>();
+
   return (
     <main className="space-y-8">
       <h1 className="text-4xl font-bold">Post an Item</h1>
@@ -14,6 +18,9 @@ export default function CreatePage() {
         // action={createItem}
         onSubmit={async (e) => {
           e.preventDefault();
+
+          if (!date) return;
+
           const form = e.currentTarget as HTMLFormElement;
           const formData = new FormData(form);
           const file = formData.get("file") as File;
@@ -32,6 +39,7 @@ export default function CreatePage() {
               parseInt(formData.get("startingPrice") as string) * 100
             ),
             fileName: file.name,
+            endDate: date,
           });
         }}
       >
@@ -51,6 +59,7 @@ export default function CreatePage() {
           required
         />
         <Input type="file" name="file" />
+        <DatePickerDemo date={date} setDate={setDate} />
         <Button className="self-end" type="submit">
           Post Item
         </Button>
